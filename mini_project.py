@@ -1,19 +1,95 @@
-import random
+class College:
+    def __init__(self, name, marks_requirement):
+        self.name = name
+        self.marks_requirement = marks_requirement
 
-def guess_num():
-    number = random.randint(1, 10)
+def main():
+    # Predefined/default colleges
+    colleges = [
+        College("Oxford University", 80),
+        College("MITS", 70),
+        College("VISWAM", 65),
+        College("CAMBRIDGE UNIVERSITY", 87),
+        College("Gnanambika",68)
+    ]
 
-    while True: #the keyword true is used to repeate the loop and this will stop when break statement is given.
-        try: #we used the exception handling block to understand the code clearly.
-            guess = int(input("Guess the number between 1 to 10: "))#asking the user to give input.
-            if guess < number: #if your guess is lesser than the given numbers then print the given num is too low
-                print("The given number is Too low! Try again.")
-            elif guess > number: #if your guess is greater than the given numbers the print your guess is too high 
-                print("The given number is Too high! Try again.")
-            else:   #after guessing correctly the number then print congratulations! you guessed correctly
-                print("Congratulations! You have guessed the number correctly.")
-                break # here break is used to stop the repeated loop and after guessing correctly the loop will be end.
-        except ValueError: # it is used to know the wrong stetement passed by user is invalid or error based on our requirments given. 
-            print("Invalid input. Please enter again.")
 
-guess_num() #calling the function.
+    while True:
+        print("\n---------------College Admissions System-------------")
+        print("1. Select a College")     
+        print("2. Apply to College")     
+        print("3. Exit")                 
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            print("\n----------Available Colleges:-----------")
+            
+            for i, college in enumerate(colleges):
+                print(f"{i+1}. {college.name} (Marks Required: {college.marks_requirement})")
+
+
+
+            try:
+                selected_index = int(input("Select a college (by number): ")) - 1
+                if selected_index < 0 or selected_index >= len(colleges):
+    
+                    print("Invalid choice. Please choose a valid college.")
+                    continue
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+
+            selected_college = colleges[selected_index]
+            print(f"You have selected: {selected_college.name}")
+
+        elif choice == "2":
+            if not colleges:
+                print("No colleges available. Please create a college first.")
+                continue
+
+            
+            if selected_college:
+                use_selected = input(f"Apply to selected college: {selected_college.name}? (yes/no): ").strip().lower()
+                if use_selected == 'yes':
+                    college_choice = colleges.index(selected_college)
+                else:
+                    selected_college = None  # Reset and let user choose
+            if not selected_college:
+                print("\nAvailable Colleges:")
+                for i, college in enumerate(colleges):
+                    print(f"{i+1}. {college.name} (Marks Required: {college.marks_requirement})")
+
+                try:
+                    college_choice = int(input("Choose a college (by number): ")) - 1
+                    if college_choice < 0 or college_choice >= len(colleges):
+                        print("Invalid choice. Please choose a valid college.")
+                        continue
+
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+                    continue
+
+                selected_college = colleges[college_choice]
+
+            student_name = input("Enter student name: ")
+            try:
+                marks = float(input("Enter student marks: "))
+
+            except ValueError:
+                print("Invalid marks input. Please enter a valid number.")
+                continue
+
+            if marks >= selected_college.marks_requirement:
+                print(f"{student_name} has been accepted into {selected_college.name}!")
+            else:
+                print(f"Sorry, {student_name} did not meet the requirement for {selected_college.name}.")
+
+        elif choice == "3":
+            print("---------------THANK YOU FOR VISITING-------------")
+            break
+
+        else:
+            print("Invalid option. Please choose 1, 2, or 3.")
+
+main()
